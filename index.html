@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Wordle - Guess the Word</title>
+    <meta name="description" content="Guess a 5-letter word in 6 tries. Daily and unlimited modes. Works offline as a PWA." />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/my_wordle/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    
+    <!-- PWA -->
+    <meta name="theme-color" content="#6aaa64" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#538d4e" media="(prefers-color-scheme: dark)" />
+    <meta name="application-name" content="Wordle" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Wordle" />
+    
+    <!-- Prevent flash of wrong theme -->
+    <script>
+      (function() {
+        try {
+          const settings = JSON.parse(localStorage.getItem('wordle-settings') || '{}');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (settings.darkMode === true || (settings.darkMode === undefined && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+          if (settings.highContrast) {
+            document.documentElement.classList.add('high-contrast');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    
+    <!-- Handle GitHub Pages SPA redirect from 404.html -->
+    <script>
+      (function() {
+        const params = new URLSearchParams(window.location.search);
+        const redirectPath = params.get('p');
+        if (redirectPath) {
+          if (redirectPath.startsWith('/') && !redirectPath.startsWith('//') && !redirectPath.includes('://')) {
+            params.delete('p');
+            const newSearch = params.toString();
+            const newUrl = redirectPath + (newSearch ? '?' + newSearch : '');
+            window.history.replaceState(null, '', newUrl);
+          }
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/my_wordle/assets/index-DE3RdHxy.js"></script>
+    <link rel="stylesheet" crossorigin href="/my_wordle/assets/index-CRBUZ0ES.css">
+  <link rel="manifest" href="/my_wordle/manifest.webmanifest"></head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

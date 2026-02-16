@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Wordle - Redirecting...</title>
+  <script>
+    const path = window.location.pathname;
+    const search = window.location.search;
+    if (path && path.startsWith('/') && !path.startsWith('//') && !path.includes('://')) {
+      window.location.replace(window.location.origin + '/?p=' + encodeURIComponent(path + search));
+    } else {
+      window.location.replace(window.location.origin);
+    }
+  </script>
+</head>
+<body>
+  <p>Redirecting...</p>
+</body>
+</html>

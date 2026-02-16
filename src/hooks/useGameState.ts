@@ -300,6 +300,43 @@ export function useGameState(initialMode: GameMode = 'daily') {
     }
   }, [state.mode])
 
+  /** Reset the current game (abandon in-progress, or restart after win/loss) */
+  const resetGame = useCallback(() => {
+    const answer = state.mode === 'daily' ? getDailyWord() : getRandomWord()
+    const settings = loadSettings()
+    const fresh: GameState = {
+      mode: state.mode,
+      answer,
+      guesses: [],
+      currentGuess: '',
+      gameStatus: 'playing',
+      hardMode: settings.hardMode,
+      puzzleNumber: state.mode === 'daily' ? getDailyNumber() : 0,
+      usedLetters: {},
+      toastMessage: null,
+      shakeRow: false,
+      revealRow: null,
+    }
+    saveGameState(state.mode, {
+      date: state.mode === 'daily' ? getTodayString() : undefined,
+      answer,
+      guesses: [],
+      gameStatus: 'playing',
+      hardMode: settings.hardMode,
+    })
+    setState(fresh)
+  }, [state.mode])
+
+  /** Reset ALL data: clear all localStorage and reinitialize */
+  const resetAll = useCallback(() => {
+    localStorage.removeItem('wordle-daily-state')
+    localStorage.removeItem('wordle-unlimited-state')
+    localStorage.removeItem('wordle-stats-daily')
+    localStorage.removeItem('wordle-stats-unlimited')
+    localStorage.removeItem('wordle-settings')
+    setState(initState(state.mode))
+  }, [state.mode])
+
   return {
     ...state,
     addLetter,
@@ -311,5 +348,7 @@ export function useGameState(initialMode: GameMode = 'daily') {
     toggleHardMode,
     setMode,
     newGame,
+    resetGame,
+    resetAll,
   }
 }

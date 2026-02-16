@@ -2,6 +2,32 @@
 
 A vibe-coded Wordle clone — PWA that works offline, with daily and unlimited modes.
 
+## 🎮 Play Now
+
+**[https://alpiepho.github.io/my_wordle/](https://alpiepho.github.io/my_wordle/)**
+
+### Install as an App
+
+You can install My Wordle on your phone's home screen for a native app-like experience (works offline!).
+
+#### iPhone / iPad (Safari)
+
+1. Open the link above in **Safari** (required — other browsers won't show the option)
+2. Tap the **Share** button (square with arrow pointing up) at the bottom of the screen
+3. Scroll down and tap **"Add to Home Screen"**
+4. Tap **"Add"** in the upper right
+
+#### Android (Chrome)
+
+1. Open the link above in **Chrome**
+2. Tap the **three-dot menu** (⋮) in the upper right
+3. Tap **"Add to Home screen"** or **"Install app"**
+4. Tap **"Install"** to confirm
+
+Once installed, the app launches in its own window without the browser UI and works offline.
+
+---
+
 - Vibe coded with Copilot / Agent / Claude Opus 4.6
 - Modeled after [app-fire-calculator](https://github.com/jamesmontemagno/app-fire-calculator) for PWA patterns
 - React 19, TypeScript, Vite, Tailwind CSS 4

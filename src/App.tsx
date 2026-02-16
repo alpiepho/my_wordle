@@ -17,7 +17,7 @@ export default function App() {
   const [statsOpen, setStatsOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [shareToast, setShareToast] = useState<string | null>(null)
-  const { highContrast } = useTheme()
+  const { highContrast, setDarkMode, setHighContrast } = useTheme()
 
   const game = useGameState('daily')
 
@@ -131,6 +131,14 @@ export default function App() {
         onClose={() => setSettingsOpen(false)}
         hardMode={game.hardMode}
         onToggleHardMode={game.toggleHardMode}
+        onResetGame={game.resetGame}
+        onResetAll={() => {
+          game.resetAll()
+          // Theme context reads from localStorage on init, which resetAll just cleared,
+          // so reset theme to system defaults
+          setDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches)
+          setHighContrast(false)
+        }}
       />
 
       <UpdatePrompt />

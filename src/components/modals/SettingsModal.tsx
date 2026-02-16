@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Modal from './Modal'
 import { useTheme } from '@/context/ThemeContext'
 
@@ -6,13 +7,33 @@ interface SettingsModalProps {
   onClose: () => void
   hardMode: boolean
   onToggleHardMode: () => void
+  onResetGame: () => void
+  onResetAll: () => void
 }
 
-export default function SettingsModal({ open, onClose, hardMode, onToggleHardMode }: SettingsModalProps) {
+export default function SettingsModal({ open, onClose, hardMode, onToggleHardMode, onResetGame, onResetAll }: SettingsModalProps) {
   const { darkMode, setDarkMode, highContrast, setHighContrast } = useTheme()
+  const [confirmReset, setConfirmReset] = useState<'game' | 'all' | null>(null)
+
+  const handleClose = () => {
+    setConfirmReset(null)
+    onClose()
+  }
+
+  const handleResetGame = () => {
+    onResetGame()
+    setConfirmReset(null)
+    handleClose()
+  }
+
+  const handleResetAll = () => {
+    onResetAll()
+    setConfirmReset(null)
+    handleClose()
+  }
 
   return (
-    <Modal open={open} onClose={onClose} title="Settings">
+    <Modal open={open} onClose={handleClose} title="Settings">
       <div className="space-y-4">
         <SettingRow
           label="Hard Mode"
@@ -32,6 +53,68 @@ export default function SettingsModal({ open, onClose, hardMode, onToggleHardMod
           checked={highContrast}
           onChange={() => setHighContrast(!highContrast)}
         />
+      </div>
+
+      {/* Danger zone */}
+      <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
+        {/* Reset Game */}
+        {confirmReset === 'game' ? (
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs text-red-600 dark:text-red-400">Reset current game?</p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setConfirmReset(null)}
+                className="px-3 py-1 text-xs font-medium rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleResetGame}
+                className="px-3 py-1 text-xs font-medium rounded bg-red-600 text-white hover:bg-red-700 cursor-pointer transition-colors"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => setConfirmReset('game')}
+            className="w-full py-2 text-sm font-medium rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer transition-colors"
+          >
+            Reset Game
+          </button>
+        )}
+
+        {/* Reset All */}
+        {confirmReset === 'all' ? (
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs text-red-600 dark:text-red-400">Erase all data?</p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setConfirmReset(null)}
+                className="px-3 py-1 text-xs font-medium rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleResetAll}
+                className="px-3 py-1 text-xs font-medium rounded bg-red-600 text-white hover:bg-red-700 cursor-pointer transition-colors"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => setConfirmReset('all')}
+            className="w-full py-2 text-sm font-medium rounded bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50 cursor-pointer transition-colors"
+          >
+            Reset All Data
+          </button>
+        )}
+        <p className="text-[10px] text-gray-400 dark:text-gray-500 text-center">
+          Reset All clears all settings, statistics, and saved games.
+        </p>
       </div>
     </Modal>
   )
@@ -58,15 +141,15 @@ function SettingRow({
       </div>
       <button
         onClick={onChange}
-        className={`relative w-12 h-7 rounded-full transition-colors cursor-pointer ${
+        className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors cursor-pointer ${
           checked ? 'bg-[var(--color-correct)]' : 'bg-gray-300 dark:bg-gray-600'
         }`}
         role="switch"
         aria-checked={checked}
       >
         <span
-          className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow transition-transform ${
-            checked ? 'translate-x-5' : 'translate-x-0.5'
+          className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${
+            checked ? 'translate-x-6' : 'translate-x-1'
           }`}
         />
       </button>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Modal from './Modal'
-import type { GameMode, GameStats } from '@/hooks/useStats'
+import type { GameMode } from '@/hooks/useStats'
 import { loadStats } from '@/hooks/useStats'
 
 interface StatsModalProps {

@@ -7,9 +7,10 @@ interface TileProps {
   position?: number
   isRevealing?: boolean
   isBouncing?: boolean
+  scale?: number
 }
 
-export default function Tile({ letter, state = 'idle', position = 0, isRevealing, isBouncing }: TileProps) {
+export default function Tile({ letter, state = 'idle', position = 0, isRevealing, isBouncing, scale = 1 }: TileProps) {
   const [phase, setPhase] = useState<'idle' | 'flip-in' | 'flip-out' | 'done'>('idle')
   const [displayState, setDisplayState] = useState(state)
 
@@ -54,16 +55,24 @@ export default function Tile({ letter, state = 'idle', position = 0, isRevealing
     return ''
   })()
 
+  const tileSize = 62 * scale
+  const fontSize = 2 * scale
+  
   return (
     <div
       className={`
-        w-[62px] h-[62px] max-w-[62px] max-h-[62px]
-        sm:w-[62px] sm:h-[62px]
         border-2 flex items-center justify-center
-        text-[2rem] font-bold uppercase select-none
+        font-bold uppercase select-none
         ${colorClass} ${animClass}
       `}
-      style={isBouncing ? { animationDelay: `${position * 100}ms` } : undefined}
+      style={{
+        width: `${tileSize}px`,
+        height: `${tileSize}px`,
+        maxWidth: `${tileSize}px`,
+        maxHeight: `${tileSize}px`,
+        fontSize: `${fontSize}rem`,
+        animationDelay: isBouncing ? `${position * 100}ms` : undefined,
+      }}
     >
       {letter || ''}
     </div>

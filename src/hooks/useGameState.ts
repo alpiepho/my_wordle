@@ -18,6 +18,7 @@ interface SavedGameState {
   guesses: EvaluatedLetter[][]
   gameStatus: GameStatus
   hardMode: boolean
+  tenTriesMode: boolean
 }
 
 interface GameState {
@@ -27,6 +28,7 @@ interface GameState {
   currentGuess: string
   gameStatus: GameStatus
   hardMode: boolean
+  tenTriesMode: boolean
   puzzleNumber: number
   /** Map of letter → best state from all guesses */
   usedLetters: Record<string, LetterState>
@@ -42,15 +44,15 @@ function getStateKey(mode: GameMode): string {
   return mode === 'daily' ? 'wordle-daily-state' : 'wordle-unlimited-state'
 }
 
-function loadSettings(): { hardMode: boolean; mode: GameMode } {
+function loadSettings(): { hardMode: boolean; mode: GameMode; tenTriesMode: boolean } {
   try {
     const raw = localStorage.getItem('wordle-settings')
     if (raw) {
       const parsed = JSON.parse(raw)
-      return { hardMode: parsed.hardMode ?? false, mode: parsed.mode ?? 'daily' }
+      return { hardMode: parsed.hardMode ?? false, mode: parsed.mode ?? 'daily', tenTriesMode: parsed.tenTriesMode ?? false }
     }
   } catch { /* ignore */ }
-  return { hardMode: false, mode: 'daily' }
+  return { hardMode: false, mode: 'daily', tenTriesMode: false }
 }
 
 function saveHardModeSetting(hardMode: boolean) {
@@ -61,6 +63,11 @@ function saveHardModeSetting(hardMode: boolean) {
 function saveGameModeSetting(mode: GameMode) {
   const existing = JSON.parse(localStorage.getItem('wordle-settings') || '{}')
   localStorage.setItem('wordle-settings', JSON.stringify({ ...existing, mode }))
+}
+
+function saveTenTriesSetting(tenTriesMode: boolean) {
+  const existing = JSON.parse(localStorage.getItem('wordle-settings') || '{}')
+  localStorage.setItem('wordle-settings', JSON.stringify({ ...existing, tenTriesMode }))
 }
 
 function buildUsedLetters(guesses: EvaluatedLetter[][]): Record<string, LetterState> {
@@ -105,6 +112,7 @@ function initState(mode: GameMode): GameState {
           currentGuess: '',
           gameStatus: saved.gameStatus,
           hardMode: saved.hardMode,
+          tenTriesMode: saved.tenTriesMode,
           puzzleNumber: getDailyNumber(),
           usedLetters: buildUsedLetters(saved.guesses),
           toastMessage: null,
@@ -122,6 +130,7 @@ function initState(mode: GameMode): GameState {
           currentGuess: '',
           gameStatus: saved.gameStatus,
           hardMode: saved.hardMode,
+          tenTriesMode: saved.tenTriesMode,
           puzzleNumber: 0,
           usedLetters: buildUsedLetters(saved.guesses),
           toastMessage: null,
@@ -141,6 +150,7 @@ function initState(mode: GameMode): GameState {
     currentGuess: '',
     gameStatus: 'playing',
     hardMode: settings.hardMode,
+    tenTriesMode: settings.tenTriesMode,
     puzzleNumber: mode === 'daily' ? getDailyNumber() : 0,
     usedLetters: {},
     toastMessage: null,
@@ -154,6 +164,7 @@ function initState(mode: GameMode): GameState {
     guesses: [],
     gameStatus: 'playing',
     hardMode: settings.hardMode,
+    tenTriesMode: settings.tenTriesMode,
   })
 
   return freshState
@@ -180,8 +191,9 @@ export function useGameState(initialMode: GameMode = 'daily') {
       guesses: state.guesses,
       gameStatus: state.gameStatus,
       hardMode: state.hardMode,
+      tenTriesMode: state.tenTriesMode,
     })
-  }, [state.guesses, state.gameStatus, state.mode, state.answer, state.hardMode])
+  }, [state.guesses, state.gameStatus, state.mode, state.answer, state.hardMode, state.tenTriesMode])
 
   const addLetter = useCallback((letter: string) => {
     setState(prev => {
@@ -228,7 +240,8 @@ export function useGameState(initialMode: GameMode = 'daily') {
 
       // Check win/loss
       const isWin = evaluated.every(l => l.state === 'correct')
-      const isLoss = !isWin && newGuesses.length >= MAX_GUESSES
+      const maxGuesses = prev.tenTriesMode ? 10 : 6
+      const isLoss = !isWin && newGuesses.length >= maxGuesses
 
       let newStatus: GameStatus = 'playing'
       let toastMessage: string | null = null
@@ -277,6 +290,17 @@ export function useGameState(initialMode: GameMode = 'daily') {
       const newHardMode = !prev.hardMode
       saveHardModeSetting(newHardMode)
       return { ...prev, hardMode: newHardMode }
+    })
+  }, [])
+
+  const toggleTenTriesMode = useCallback(() => {
+    setState(prev => {
+      if (prev.guesses.length > 0 && prev.gameStatus === 'playing') {
+        return { ...prev, toastMessage: '10 tries mode can only be changed at the start of a game' }
+      }
+      const newTenTriesMode = !prev.tenTriesMode
+      saveTenTriesSetting(newTenTriesMode)
+      return { ...prev, tenTriesMode: newTenTriesMode }
     })
   }, [])
 
@@ -357,6 +381,7 @@ export function useGameState(initialMode: GameMode = 'daily') {
     clearShake,
     clearRevealRow,
     toggleHardMode,
+    toggleTenTriesMode,
     setMode,
     newGame,
     resetGame,

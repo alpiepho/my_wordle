@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import Tile from './Tile'
 import type { EvaluatedLetter } from '@/utils/evaluateGuess'
 
-const MAX_GUESSES = 6
 const WORD_LENGTH = 5
 
 interface BoardProps {
@@ -13,7 +12,13 @@ interface BoardProps {
   revealRow: number | null
   onRevealEnd: () => void
   gameStatus: 'playing' | 'won' | 'lost'
+  tenTriesMode?: boolean
 }
+
+const SCALE_FACTOR = {
+  '6': 1,
+  '10': 0.75,
+} as const
 
 export default function Board({
   guesses,
@@ -23,7 +28,10 @@ export default function Board({
   revealRow,
   onRevealEnd,
   gameStatus,
+  tenTriesMode = false,
 }: BoardProps) {
+  const maxGuesses = tenTriesMode ? 10 : 6
+  const scale = tenTriesMode ? 0.75 : 1
   const [bounceRow, setBounceRow] = useState<number | null>(null)
 
   // After reveal animation finishes, trigger bounce on win
@@ -51,7 +59,7 @@ export default function Board({
 
   const rows = []
 
-  for (let i = 0; i < MAX_GUESSES; i++) {
+  for (let i = 0; i < maxGuesses; i++) {
     const isCurrentRow = i === guesses.length
     const isRevealing = i === revealRow
     const isBouncing = i === bounceRow
@@ -68,6 +76,7 @@ export default function Board({
           position={j}
           isRevealing={isRevealing}
           isBouncing={isBouncing}
+          scale={scale}
         />
       ))
     } else if (isCurrentRow) {
@@ -78,21 +87,24 @@ export default function Board({
           letter={currentGuess[j] || ''}
           state={currentGuess[j] ? 'tbd' : 'idle'}
           position={j}
+          scale={scale}
         />
       ))
     } else {
       // Empty row
       tiles = Array.from({ length: WORD_LENGTH }, (_, j) => (
-        <Tile key={j} position={j} />
+        <Tile key={j} position={j} scale={scale} />
       ))
     }
 
     const shouldShake = isCurrentRow && shakeRow
 
+    const gapSize = Math.round(5 * scale)
     rows.push(
       <div
         key={i}
-        className={`flex gap-[5px] ${shouldShake ? 'row-shake' : ''}`}
+        className={`flex ${shouldShake ? 'row-shake' : ''}`}
+        style={{ gap: `${gapSize}px` }}
         onAnimationEnd={shouldShake ? onShakeEnd : undefined}
       >
         {tiles}
@@ -100,8 +112,9 @@ export default function Board({
     )
   }
 
+  const verticalGapSize = Math.round(5 * scale)
   return (
-    <div className="flex flex-col gap-[5px] items-center py-2">
+    <div className="flex flex-col items-center py-2" style={{ gap: `${verticalGapSize}px` }}>
       {rows}
     </div>
   )

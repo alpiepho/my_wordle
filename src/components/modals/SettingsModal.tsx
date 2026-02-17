@@ -7,25 +7,39 @@ interface SettingsModalProps {
   onClose: () => void
   hardMode: boolean
   onToggleHardMode: () => void
+  tenTriesMode: boolean
+  onToggleTenTriesMode: () => void
   onResetGame: () => void
   onResetAll: () => void
 }
 
 declare const __APP_VERSION__: string
 
-export default function SettingsModal({ open, onClose, hardMode, onToggleHardMode, onResetGame, onResetAll }: SettingsModalProps) {
+export default function SettingsModal({ open, onClose, hardMode, onToggleHardMode, tenTriesMode, onToggleTenTriesMode, onResetGame, onResetAll }: SettingsModalProps) {
   const { darkMode, setDarkMode, highContrast, setHighContrast } = useTheme()
   const [confirmReset, setConfirmReset] = useState<'game' | 'all' | null>(null)
+  const [confirmTenTries, setConfirmTenTries] = useState(false)
 
   const handleClose = () => {
     setConfirmReset(null)
+    setConfirmTenTries(false)
     onClose()
   }
 
-  const handleResetGame = () => {
-    onResetGame()
-    setConfirmReset(null)
-    handleClose()
+  const handleToggleTenTries = () => {
+    if (!tenTriesMode) {
+      // Trying to enable 10 tries - show confirmation
+      setConfirmTenTries(true)
+    } else {
+      // Disabling 10 tries - just do it
+      onToggleTenTriesMode()
+      setConfirmTenTries(false)
+    }
+  }
+
+  const handleConfirmTenTries = () => {
+    onToggleTenTriesMode()
+    setConfirmTenTries(false)
   }
 
   const handleResetAll = () => {
@@ -45,6 +59,12 @@ export default function SettingsModal({ open, onClose, hardMode, onToggleHardMod
           description="Any revealed hints must be used in subsequent guesses"
           checked={hardMode}
           onChange={onToggleHardMode}
+        />
+        <SettingRow
+          label="HACK: 10 Tries"
+          description="Solve the puzzle in up to 10 tries instead of 6"
+          checked={tenTriesMode}
+          onChange={handleToggleTenTries}
         />
         <SettingRow
           label="Dark Theme"
@@ -125,6 +145,27 @@ export default function SettingsModal({ open, onClose, hardMode, onToggleHardMod
         <p className="text-[10px] text-gray-400 dark:text-gray-500 text-center">
           Reset All clears all settings, statistics, and saved games.
         </p>
+
+        {/* 10 Tries Confirmation */}
+        {confirmTenTries ? (
+          <div className="flex items-center justify-between gap-3 mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded border border-yellow-200 dark:border-yellow-800">
+            <p className="text-xs text-yellow-700 dark:text-yellow-400">Are you sure you want to be a whimp?</p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setConfirmTenTries(false)}
+                className="px-3 py-1 text-xs font-medium rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmTenTries}
+                className="px-3 py-1 text-xs font-medium rounded bg-yellow-600 text-white hover:bg-yellow-700 cursor-pointer transition-colors"
+              >
+                Enable
+              </button>
+            </div>
+          </div>
+        ) : null}
       </div>
     </Modal>
   )

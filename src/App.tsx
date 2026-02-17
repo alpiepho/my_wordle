@@ -94,6 +94,7 @@ export default function App() {
             revealRow={game.revealRow}
             onRevealEnd={handleRevealEnd}
             gameStatus={game.gameStatus}
+            tenTriesMode={game.tenTriesMode}
           />
         </div>
 
@@ -144,6 +145,8 @@ export default function App() {
         onClose={() => setSettingsOpen(false)}
         hardMode={game.hardMode}
         onToggleHardMode={game.toggleHardMode}
+        tenTriesMode={game.tenTriesMode}
+        onToggleTenTriesMode={game.toggleTenTriesMode}
         onResetGame={game.resetGame}
         onResetAll={() => {
           game.resetAll()

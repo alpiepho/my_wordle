@@ -122,5 +122,5 @@ Using Copilot/Agent/Opus 4.6
 - [x] qr code
 - [x] add how to install to info
 - [x] on first boot (ie default storage) detect pwa and modal with how to install?
-- [ ] option for more tries
+- [x] option for more tries
 - [ ] style option boring vs ???

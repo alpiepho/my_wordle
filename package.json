@@ -1,10 +1,16 @@
 {
   "name": "app-wordle",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "My Wordle - A Wordle clone PWA. Guess a 5-letter word in 6 tries. Daily and unlimited modes. Works offline.",
-  "keywords": ["wordle", "word-game", "puzzle", "pwa", "my-wordle"],
+  "keywords": [
+    "wordle",
+    "word-game",
+    "puzzle",
+    "pwa",
+    "my-wordle"
+  ],
   "license": "MIT",
   "scripts": {
     "dev": "vite",
@@ -34,6 +40,7 @@
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
+    "qrcode": "^1.5.4",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "vite-plugin-pwa": "^1.2.0"

@@ -1,7 +1,7 @@
 {
   "name": "app-wordle",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "description": "My Wordle - A Wordle clone PWA. Guess a 5-letter word in 6 tries. Daily and unlimited modes. Works offline.",
   "keywords": [
@@ -27,6 +27,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",

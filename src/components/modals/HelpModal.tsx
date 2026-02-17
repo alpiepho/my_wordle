@@ -21,8 +21,8 @@ export default function HelpModal({ open, onClose }: HelpModalProps) {
       width: 256,
       margin: 2,
     })
-      .then(url => setQrCodeUrl(url))
-      .catch(err => console.error('Failed to generate QR code:', err))
+      .then((url: string) => setQrCodeUrl(url))
+      .catch((err: Error) => console.error('Failed to generate QR code:', err))
   }, [])
 
   const handleCopyUrl = async () => {

@@ -26,7 +26,7 @@ export default function Header({ mode, onModeChange, onHelp, onStats, onSettings
 
       {/* Center: title + mode toggle */}
       <div className="flex flex-col items-center">
-        <h1 className="text-xl sm:text-2xl font-bold tracking-wider uppercase">Wordle</h1>
+        <h1 className="text-xl sm:text-2xl font-bold tracking-wider uppercase">My Wordle</h1>
         <div className="flex gap-1 mt-1">
           <button
             onClick={() => onModeChange('daily')}

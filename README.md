@@ -112,3 +112,15 @@ Using Copilot/Agent/Opus 4.6
 - Please ask clarifying questions
 - Please generate an implementation plan for this new app
 
+## TODO
+
+- [ ] My Wordle
+- [ ] version
+- [ ] save daily/ unlimited setting
+- [ ] style option boring vs ???
+- [ ] option for more tries
+- [ ] reset game message
+- [ ] link at end of info
+- [ ] qr code
+- [ ] add how to install to info
+- [ ] on first boot (ie default storage) detect pwa and modal with how to install?

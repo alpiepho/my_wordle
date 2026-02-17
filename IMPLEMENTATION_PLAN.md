@@ -1,4 +1,4 @@
-# Wordle Clone PWA — Implementation Plan
+# My Wordle Clone PWA — Implementation Plan
 
 ## Overview
 
@@ -79,7 +79,7 @@ samples/app-wordle/
 - Create `samples/app-wordle/` with `package.json` mirroring fire-calculator dependencies (minus Recharts/ExcelJS, plus `gh-pages`).
 - Copy and adapt `vite.config.ts`:
   - Base URL: `'/app-wordle/'` (or repo name for GitHub Pages).
-  - PWA manifest: name "Wordle", theme color green (#6aaa64), Wordle-themed icons.
+  - PWA manifest: name "My Wordle", theme color green (#6aaa64), Wordle-themed icons.
   - Workbox: `globPatterns: ['**/*.{js,css,html,ico,png,svg,json}']`.
   - Register type: `'prompt'`.
 - Copy and adapt `tsconfig.json` (same strict settings, path alias `@/*` → `src/*`).
@@ -251,7 +251,7 @@ interface GameStats {
 
 ### 5.1 Header — `src/components/layout/Header.tsx`
 
-- App title "Wordle" centered.
+- App title "My Wordle" centered.
 - Left: Help (❓) icon.
 - Right: Stats (📊), Settings (⚙️) icons.
 - Mode toggle: "Daily" / "Unlimited" switch/tabs.

@@ -3,8 +3,8 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "A Wordle clone PWA. Guess a 5-letter word in 6 tries. Daily and unlimited modes. Works offline.",
-  "keywords": ["wordle", "word-game", "puzzle", "pwa"],
+  "description": "My Wordle - A Wordle clone PWA. Guess a 5-letter word in 6 tries. Daily and unlimited modes. Works offline.",
+  "keywords": ["wordle", "word-game", "puzzle", "pwa", "my-wordle"],
   "license": "MIT",
   "scripts": {
     "dev": "vite",

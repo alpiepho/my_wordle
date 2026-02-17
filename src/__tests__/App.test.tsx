@@ -22,7 +22,7 @@ function renderApp() {
 describe('App', () => {
   it('renders without crashing', () => {
     renderApp()
-    expect(screen.getByText('Wordle')).toBeInTheDocument()
+    expect(screen.getByText('My Wordle')).toBeInTheDocument()
   })
 
   it('renders the keyboard with Enter and Backspace', () => {

@@ -11,6 +11,8 @@ interface SettingsModalProps {
   onResetAll: () => void
 }
 
+declare const __APP_VERSION__: string
+
 export default function SettingsModal({ open, onClose, hardMode, onToggleHardMode, onResetGame, onResetAll }: SettingsModalProps) {
   const { darkMode, setDarkMode, highContrast, setHighContrast } = useTheme()
   const [confirmReset, setConfirmReset] = useState<'game' | 'all' | null>(null)
@@ -34,6 +36,9 @@ export default function SettingsModal({ open, onClose, hardMode, onToggleHardMod
 
   return (
     <Modal open={open} onClose={handleClose} title="Settings">
+      <div className="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
+        <p className="text-xs text-gray-500 dark:text-gray-400">Version {__APP_VERSION__}</p>
+      </div>
       <div className="space-y-4">
         <SettingRow
           label="Hard Mode"
@@ -77,12 +82,17 @@ export default function SettingsModal({ open, onClose, hardMode, onToggleHardMod
             </div>
           </div>
         ) : (
-          <button
-            onClick={() => setConfirmReset('game')}
-            className="w-full py-2 text-sm font-medium rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer transition-colors"
-          >
-            Reset Game
-          </button>
+          <>
+            <button
+              onClick={() => setConfirmReset('game')}
+              className="w-full py-2 text-sm font-medium rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer transition-colors"
+            >
+              Reset Game
+            </button>
+            <p className="text-[10px] text-gray-400 dark:text-gray-500 text-center">
+              Starts a fresh game in the current mode.
+            </p>
+          </>
         )}
 
         {/* Reset All */}

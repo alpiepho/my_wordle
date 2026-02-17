@@ -1,7 +1,7 @@
 {
   "name": "app-wordle",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.1.0",
   "type": "module",
   "description": "My Wordle - A Wordle clone PWA. Guess a 5-letter word in 6 tries. Daily and unlimited modes. Works offline.",
   "keywords": ["wordle", "word-game", "puzzle", "pwa", "my-wordle"],
@@ -13,7 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build && npm version patch --no-git-tag-version",
     "deploy": "gh-pages -d dist"
   },
   "devDependencies": {

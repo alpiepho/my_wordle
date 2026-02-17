@@ -2,6 +2,9 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import { readFileSync } from 'fs'
+
+const packageJson = JSON.parse(readFileSync('./package.json', 'utf-8'))
 
 export default defineConfig({
   plugins: [
@@ -46,5 +49,8 @@ export default defineConfig({
     alias: {
       '@': '/src',
     },
+  },
+  define: {
+    '__APP_VERSION__': JSON.stringify(packageJson.version),
   },
 })

@@ -42,19 +42,25 @@ function getStateKey(mode: GameMode): string {
   return mode === 'daily' ? 'wordle-daily-state' : 'wordle-unlimited-state'
 }
 
-function loadSettings(): { hardMode: boolean } {
+function loadSettings(): { hardMode: boolean; mode: GameMode } {
   try {
     const raw = localStorage.getItem('wordle-settings')
     if (raw) {
-      return { hardMode: JSON.parse(raw).hardMode ?? false }
+      const parsed = JSON.parse(raw)
+      return { hardMode: parsed.hardMode ?? false, mode: parsed.mode ?? 'daily' }
     }
   } catch { /* ignore */ }
-  return { hardMode: false }
+  return { hardMode: false, mode: 'daily' }
 }
 
 function saveHardModeSetting(hardMode: boolean) {
   const existing = JSON.parse(localStorage.getItem('wordle-settings') || '{}')
   localStorage.setItem('wordle-settings', JSON.stringify({ ...existing, hardMode }))
+}
+
+function saveGameModeSetting(mode: GameMode) {
+  const existing = JSON.parse(localStorage.getItem('wordle-settings') || '{}')
+  localStorage.setItem('wordle-settings', JSON.stringify({ ...existing, mode }))
 }
 
 function buildUsedLetters(guesses: EvaluatedLetter[][]): Record<string, LetterState> {
@@ -154,10 +160,15 @@ function initState(mode: GameMode): GameState {
 }
 
 export function useGameState(initialMode: GameMode = 'daily') {
-  const [state, setState] = useState<GameState>(() => initState(initialMode))
+  // Load saved mode preference, but allow initialMode to override if provided
+  const savedSettings = loadSettings()
+  const startMode = initialMode === 'daily' ? savedSettings.mode : initialMode
+  
+  const [state, setState] = useState<GameState>(() => initState(startMode))
 
-  // Switch mode
+  // Switch mode and save preference
   const setMode = useCallback((mode: GameMode) => {
+    saveGameModeSetting(mode)
     setState(initState(mode))
   }, [])
 

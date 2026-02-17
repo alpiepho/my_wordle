@@ -115,11 +115,11 @@ Using Copilot/Agent/Opus 4.6
 ## TODO
 
 - [x] My Wordle
-- [ ] version
-- [ ] save daily/ unlimited setting
+- [x] save daily/ unlimited setting
+- [x] reset game message
+- [x] version
 - [ ] style option boring vs ???
 - [ ] option for more tries
-- [ ] reset game message
 - [ ] link at end of info
 - [ ] qr code
 - [ ] add how to install to info

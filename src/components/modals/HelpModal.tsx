@@ -9,7 +9,7 @@ export default function HelpModal({ open, onClose }: HelpModalProps) {
   return (
     <Modal open={open} onClose={onClose} title="How To Play">
       <div className="space-y-4 text-sm">
-        <p>Guess the <strong>WORDLE</strong> in 6 tries.</p>
+        <p>Guess the <strong>Word</strong> in 6 tries.</p>
         <ul className="list-disc pl-5 space-y-1">
           <li>Each guess must be a valid 5-letter word.</li>
           <li>The color of the tiles will change to show how close your guess was to the word.</li>

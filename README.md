@@ -114,7 +114,7 @@ Using Copilot/Agent/Opus 4.6
 
 ## TODO
 
-- [ ] My Wordle
+- [x] My Wordle
 - [ ] version
 - [ ] save daily/ unlimited setting
 - [ ] style option boring vs ???

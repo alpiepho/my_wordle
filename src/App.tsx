@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import Header from '@/components/layout/Header'
 import Board from '@/components/game/Board'
 import Keyboard from '@/components/game/Keyboard'
@@ -6,22 +6,35 @@ import Toast from '@/components/game/Toast'
 import HelpModal from '@/components/modals/HelpModal'
 import StatsModal from '@/components/modals/StatsModal'
 import SettingsModal from '@/components/modals/SettingsModal'
+import FirstTimeModal from '@/components/modals/FirstTimeModal'
 import UpdatePrompt from '@/components/UpdatePrompt'
 import { useGameState } from '@/hooks/useGameState'
 import { useKeyboard } from '@/hooks/useKeyboard'
 import { generateShareText, copyToClipboard } from '@/utils/share'
 import { useTheme } from '@/context/ThemeContext'
 
+const FIRST_TIME_KEY = 'wordle-first-time-shown'
+
 export default function App() {
   const [helpOpen, setHelpOpen] = useState(false)
   const [statsOpen, setStatsOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [firstTimeOpen, setFirstTimeOpen] = useState(false)
   const [shareToast, setShareToast] = useState<string | null>(null)
   const { highContrast, setDarkMode, setHighContrast } = useTheme()
 
   const game = useGameState('daily')
 
-  const anyModalOpen = helpOpen || statsOpen || settingsOpen
+  // Show first-time modal on initial load
+  useEffect(() => {
+    const hasSeenFirstTime = localStorage.getItem(FIRST_TIME_KEY)
+    if (!hasSeenFirstTime) {
+      setFirstTimeOpen(true)
+      localStorage.setItem(FIRST_TIME_KEY, 'true')
+    }
+  }, [])
+
+  const anyModalOpen = helpOpen || statsOpen || settingsOpen || firstTimeOpen
 
   const handleKey = useCallback((key: string) => {
     if (key === 'enter') {
@@ -138,8 +151,13 @@ export default function App() {
           // so reset theme to system defaults
           setDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches)
           setHighContrast(false)
+          // Clear first-time flag so modal shows again
+          localStorage.removeItem(FIRST_TIME_KEY)
+          setSettingsOpen(false)
+          setFirstTimeOpen(true)
         }}
       />
+      <FirstTimeModal open={firstTimeOpen} onClose={() => setFirstTimeOpen(false)} />
 
       <UpdatePrompt />
     </div>

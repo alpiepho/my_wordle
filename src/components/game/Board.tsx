@@ -15,11 +15,6 @@ interface BoardProps {
   tenTriesMode?: boolean
 }
 
-const SCALE_FACTOR = {
-  '6': 1,
-  '10': 0.75,
-} as const
-
 export default function Board({
   guesses,
   currentGuess,

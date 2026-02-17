@@ -42,6 +42,12 @@ export default function SettingsModal({ open, onClose, hardMode, onToggleHardMod
     setConfirmTenTries(false)
   }
 
+  const handleResetGame = () => {
+    onResetGame()
+    setConfirmReset(null)
+    handleClose()
+  }
+
   const handleResetAll = () => {
     onResetAll()
     setConfirmReset(null)

@@ -9,7 +9,6 @@ import { ANSWER_WORDS } from '@/data/words'
 import type { GameMode, GameStatus } from '@/hooks/useStats'
 import { recordResult } from '@/hooks/useStats'
 
-const MAX_GUESSES = 6
 const WORD_LENGTH = 5
 
 interface SavedGameState {
@@ -319,6 +318,7 @@ export function useGameState(initialMode: GameMode = 'daily') {
         currentGuess: '',
         gameStatus: 'playing',
         hardMode: settings.hardMode,
+        tenTriesMode: settings.tenTriesMode,
         puzzleNumber: 0,
         usedLetters: {},
         toastMessage: null,
@@ -330,6 +330,7 @@ export function useGameState(initialMode: GameMode = 'daily') {
         guesses: [],
         gameStatus: 'playing',
         hardMode: settings.hardMode,
+        tenTriesMode: settings.tenTriesMode,
       })
       setState(fresh)
     }
@@ -346,6 +347,7 @@ export function useGameState(initialMode: GameMode = 'daily') {
       currentGuess: '',
       gameStatus: 'playing',
       hardMode: settings.hardMode,
+      tenTriesMode: settings.tenTriesMode,
       puzzleNumber: state.mode === 'daily' ? getDailyNumber() : 0,
       usedLetters: {},
       toastMessage: null,
@@ -358,6 +360,7 @@ export function useGameState(initialMode: GameMode = 'daily') {
       guesses: [],
       gameStatus: 'playing',
       hardMode: settings.hardMode,
+      tenTriesMode: settings.tenTriesMode,
     })
     setState(fresh)
   }, [state.mode])
